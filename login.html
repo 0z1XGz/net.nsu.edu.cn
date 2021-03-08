@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+  
+  <head>
+  <title>登录</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="js/jquery.min.js?229"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+    <link href="css/bootstrap.css"
+    rel="stylesheet" type="text/css">
+  </head>
+  
+  <body x="450" y="500" minx="450" miny="500" maxx="450" maxy="500" disoper="bf" style="background-color:black;">
+    <div id="obj1" class="cover" style="display:none;">
+      <div class="cover-image"></div>
+        <div id="obj2" class="container" style="width:280px; background-color: rgba(255,255,255,0.70);  box-shadow:4px 4px 8px rgba(0,0,0,0.50); display:none;">
+
+     
+        <br/><h4 class="form-signin-heading">使用账号密码登录：</h4>
+<div class="input-group">
+  <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+  <input id="un" type="text" class="form-control" placeholder="校园网账号">
+</div>
+<div class="input-group">
+  <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+  <input id="pw" type="password" class="form-control" placeholder="校园网密码">
+</div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" id="save" value="记住我">记住我
+          </label>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit" onclick="login()">验证用户名密码登录</button>
+<span id="faceAD" style="display: none; color:red"><br/>
+CC客户端目前已经支持<b>【刷脸登录】</b>,<br/>请前往CC官网下载新版CC客户端。<br/><br/>
+</span>
+
+<span id="face" style="display: none">
+	<hr>
+	<h5 class="form-signin-heading">已采集人像用户可直接：</h5>
+	<button class="btn btn-danger btn-block" type="submit" onclick="loginface()">刷脸登录</button><br/>
+</span>
+
+    </div>
+
+
+
+<div id="obj3" class="container" style="width:280px; background-color: rgba(255,255,255,0.70);  box-shadow:4px 4px 8px rgba(0,0,0,0.50); display:none;">
+    <h4 id="obj4">发送身份验证请求登录...</h4>
+</div> 
+ 
+    </div>
+    </body>
+    <script>
+var x
+$(function(){
+$(".cover-image").css("background-image", "url(image/" + Math.floor(Math.random() * cc_background_count) + ".jpg)");
+
+setTimeout(function(){$("#obj1").show('fade',400)},100)
+setTimeout(function(){$("#obj2").show('fade',500)},400)
+
+var ua = navigator.userAgent.toLowerCase();
+if (/iphone|ipad|ipod/.test(ua)) {
+	var po=new Object
+	po.func="dogetvalue"
+	po.v1="UNPW"
+	window.webkit.messageHandlers.external.postMessage(po);
+} else {
+	window.external.dogetvalue("UNPW")
+} 
+
+ if (GetQueryString("Face")!==null) {
+	 $("#face").show()
+$("#faceAD").hide()
+ }else{$("#faceAD").show()}
+
+})
+
+	function setunpw(un,pw)
+	{
+		$("#un").val(un)
+		$("#pw").val(pw)
+		$("#save").attr("checked",true)
+		}
+     function loginface()
+	 	 {
+			var un=document.getElementById("un").value
+			
+			 var ua = navigator.userAgent.toLowerCase();
+			if (/iphone|ipad|ipod/.test(ua)) {
+				var po=new Object
+				po.func="loginface"
+				po.v1=un
+				window.webkit.messageHandlers.external.postMessage(po);
+			} else {
+				window.external.dologinface(un)
+			} 
+			
+
+			
+		 }
+		
+     function login()
+	 	 {
+			var un=document.getElementById("un").value
+			var pw=document.getElementById("pw").value
+			var save=document.getElementById("save").checked
+
+			
+			
+			var ua = navigator.userAgent.toLowerCase();
+			if (/iphone|ipad|ipod/.test(ua)) {
+				var po=new Object
+				po.func="dologin"
+				po.v1=un
+				po.v2=pw
+				po.v3=save
+				window.webkit.messageHandlers.external.postMessage(po);
+			} else {
+				window.external.dologin(un,pw,save)
+			} 
+			
+
+			
+		 }
+     function loging()
+	 	 {
+			$("#obj2").hide()
+			$("#obj3").show('fade',300)
+		 }
+     function waitopen()
+	 	 {
+			$("#obj4").text("身份验证通过，正在等待开网...")
+/*x.setAttribute("src", "http://cc.nsu.edu.cn/audio/Logining.mp3");
+x.play()*/
+		 }
+		function GetQueryString(name) { 
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i"); 
+	var r = window.location.search.substr(1).match(reg); 
+	if (r!=null) return (r[2]); return null; 
+}
+
+</script>
+</html>
